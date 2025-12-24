@@ -1,104 +1,122 @@
-# Book class definition
-# This class represents a book and demonstrates OOP concepts such as
-# encapsulation, methods, and object state management
-class Book:
+# ------------------------------------------------
+# Imports from domain modules
+# ------------------------------------------------
+# Book implementations
+from books import PhysicalBook, DigitalBook
+from exceptions import UserNoFoudError
+# Library (composition root)
+from library import Library
+# User types and protocol for polymorphism
+from users import Student, Teacher
 
-    # Constructor method
-    # Initializes all attributes when a Book object is created
-    def __init__(self, id: int, title: str, author: str,
-                 price: float, available: bool, borrowed_times: int):
-        self.id = id  # Unique identifier of the book
-        self.title = title  # Book title
-        self.author = author  # Book author
-        self.price = price  # Book price
-        self.available = available  # Availability status
+# =================================================
+# Library initialization
+# =================================================
+# Create a Library instance
+library = Library('Las Aguas')
 
-        # Private attribute (encapsulation)
-        # The double underscore makes this attribute harder to access directly
-        # from outside the class
-        self.__borrowed_times = borrowed_times
-
-    # Method to lend a book
-    # Changes availability and increases the borrow counter
-    def lend(self):
-        if self.available:
-            self.available = False
-            self.__borrowed_times += 1
-            return f'{self.title} was lent successfully. Total lends: {self.__borrowed_times}'
-        return f'{self.title} is unavailable'
-
-    # Method to return a book
-    # Makes the book available again
-    def return_book(self):
-        if not self.available:
-            self.available = True
-        return f'{self.title} was returned successfully.'
-
-    # Method to check if a book is popular
-    # A book is considered popular if it was borrowed more than 5 times
-    def is_popular(self):
-        return self.__borrowed_times > 5
-
-    # String representation of the object
-    # This method is automatically called when printing the object
-    def __str__(self):
-        return f'{self.id} - {self.title} - {self.author} - {self.price} - Available: {self.available}'
-
-    # Getter method
-    # Allows controlled access to the private attribute
-    def get_borrowed_times(self):
-        return self.__borrowed_times
-
-    # Setter method
-    # Allows controlled modification of the private attribute
-    def set_borrowed_times(self, value):
-        self.__borrowed_times = value
-
-
-# List of Book objects (book catalog)
-# This simulates a collection of books in a library
-catalogo = [
-    Book(id=11, title="El santuario en la tiera", author="Sixto Paz",
-         price=5.00, available=True, borrowed_times=0),
-    Book(id=12, title="Budismo", author="Joshua R. Pazakiewicz",
-         price=5.00, available=True, borrowed_times=0),
-    Book(id=13, title="Etica para amador", author="Fernando Savater",
-         price=5.00, available=False, borrowed_times=0),
-    Book(id=14, title="Habitos atomicos", author="James Clear",
-         price=5.00, available=True, borrowed_times=0),
+# =================================================
+# User creation
+# =================================================
+# Create users with different concrete types
+# (Student and Teacher) that share the same behavior
+# through ApplicantProtocol
+users = [
+    Student(1, name="Domenica", id_card="123", subject='Math'),
+    Student(3, name='Jose', id_card="456", subject='Physics'),
+    Teacher(2, name="Luis", id_card="456")
 ]
 
-# Creating individual Book instances
-one_hundred = Book(
-    1,
-    '100 Años de soledad',
-    'Gabriel Garcia Marquez',
-    price=10.5,
-    available=True,
-    borrowed_times=0
-)
+# =================================================
+# Book creation
+# =================================================
+# Physical books (concrete implementation of Book)
+physical_books = [
+    PhysicalBook(
+        id=11,
+        title="El santuario en la tierra",
+        author="Sixto Paz",
+        price=5.00,
+        available=True,
+        borrowed_times=0
+    ),
 
-principito = Book(
-    2,
-    'Principito',
-    'Saint-Exupéry',
-    price=12.3,
-    available=False,
-    borrowed_times=0
-)
+    PhysicalBook(
+        id=12,
+        title="Budismo",
+        author="Joshua R. Pazakiewicz",
+        price=5.00,
+        available=True,
+        borrowed_times=0
+    ),
 
-# Lending and returning books
-print(one_hundred.lend())
-print(principito.return_book())
+    PhysicalBook(
+        id=13,
+        title="Ética para Amador",
+        author="Fernando Savater",
+        price=5.00,
+        available=False,
+        borrowed_times=0
+    ),
 
-# Using setter and getter methods
-one_hundred.set_borrowed_times(5)
-print(f'{one_hundred.title} was borrowed {one_hundred.get_borrowed_times()} times')
+    PhysicalBook(
+        id=14,
+        title="Hábitos Atómicos",
+        author="James Clear",
+        price=5.00,
+        available=True,
+        borrowed_times=0
+    ),
 
-# Adding books to the catalog
-catalogo.append(one_hundred)
-catalogo.append(principito)
+    # Positional-argument examples
+    PhysicalBook(
+        1,
+        '100 Años de Soledad',
+        'Gabriel García Márquez',
+        10.5,
+        True,
+        0
+    ),
 
-# Displaying all books in the catalog
-for book in catalogo:
-    print(book)
+    PhysicalBook(
+        2,
+        'Principito',
+        'Saint-Exupéry',
+        12.3,
+        False,
+        0
+    )
+]
+
+# Digital books (different behavior via polymorphism)
+digital_books = [
+    DigitalBook(1, 'Normandia', 'Norma Guatemala', 12, True, 2),
+    DigitalBook(2, 'Sistemas', 'James', 56, True, 6),
+    DigitalBook(3, 'La razon para estudiar', 'Erick', 56, True, 6),
+    DigitalBook(4, 'Computacion', 'Henrry', 56, True, 6),
+    DigitalBook(5, 'Algebra', 'Sofia', 56, True, 6)
+]
+
+# =================================================
+# Composition: add books and users to the library
+# =================================================
+# The Library "has" books and users
+library.books = physical_books + digital_books
+library.users = users
+
+print('-' * 30)
+print('| Welcome to the library! |')
+print('-' * 30)
+
+print(f'We have available {len(library.books_available())} books')
+for book in library.books:
+    if book.available:
+        print(f' ---> Title:{book.title} - Author:{book.author}')
+
+try:
+    id_card = input('Input your id card: ')
+    user = library.find_user(id_card)
+    print(f'{user.id_card} whit name {user.name}')
+except UserNoFoudError as e:
+    print(e)
+    print('The user does not exist')

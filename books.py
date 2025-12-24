@@ -1,5 +1,7 @@
 from typing import Protocol
 
+from exceptions import BookNotAvailable
+
 
 # ============================================================
 # PROTOCOL (Structural Typing / Polymorphism)
@@ -55,6 +57,9 @@ class Book:
     # Changes availability and updates borrow counter
     # --------------------------------------------------------
     def lend(self):
+        if not self.available:
+            raise BookNotAvailable(f'{self.title} was not available')
+
         if self.available:
             self.available = False
             self.__borrowed_times += 1

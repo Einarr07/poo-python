@@ -4,3 +4,11 @@ class LibraryError(Exception):
 
 class InvalidTitleError(LibraryError):
     pass
+
+
+class BookNotAvailable(LibraryError):
+    pass
+
+
+class UserNoFoudError(LibraryError):
+    pass

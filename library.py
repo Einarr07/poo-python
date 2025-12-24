@@ -1,3 +1,6 @@
+from exceptions import UserNoFoudError
+
+
 class Library:
     def __init__(self, name) -> None:
         # Name of the library
@@ -29,3 +32,10 @@ class Library:
             for book in self.books
             if book.available  # Filter only available books
         ]
+
+    def find_user(self, id_card):
+        for user in self.users:
+            if user.id_card == id_card:
+                return user
+
+        raise UserNoFoudError(f'User with id card: {id_card} not found')

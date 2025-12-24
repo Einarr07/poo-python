@@ -1,15 +1,13 @@
-from typing import List
-
 # ------------------------------------------------
 # Imports from domain modules
 # ------------------------------------------------
 # Book implementations
 from books import PhysicalBook, DigitalBook
-from exceptions import LibraryError
+from exceptions import UserNoFoudError
 # Library (composition root)
 from library import Library
 # User types and protocol for polymorphism
-from users import Student, Teacher, ApplicantProtocol
+from users import Student, Teacher
 
 # =================================================
 # Library initialization
@@ -23,13 +21,11 @@ library = Library('Las Aguas')
 # Create users with different concrete types
 # (Student and Teacher) that share the same behavior
 # through ApplicantProtocol
-domenica = Student(1, name="Domenica", id_card="123", subject='Math')
-jose = Student(3, name='Jose', id_card="456", subject='Physics')
-luis = Teacher(2, name="Luis", id_card="456")
-
-# Polymorphic collection:
-# All objects conform to ApplicantProtocol
-users: List[ApplicantProtocol] = [domenica, jose, luis]
+users = [
+    Student(1, name="Domenica", id_card="123", subject='Math'),
+    Student(3, name='Jose', id_card="456", subject='Physics'),
+    Teacher(2, name="Luis", id_card="456")
+]
 
 # =================================================
 # Book creation
@@ -108,16 +104,19 @@ digital_books = [
 library.books = physical_books + digital_books
 library.users = users
 
-# =================================================
-# Program execution
-# =================================================
-# Iterate over the polymorphic user list
-# and access shared attributes
-for user in users:
-    print(f'name: {user.name}')
+print('-' * 30)
+print('| Welcome to the library! |')
+print('-' * 30)
+
+print(f'We have available {len(library.books_available())} books')
+for book in library.books:
+    if book.available:
+        print(f' ---> Title:{book.title} - Author:{book.author}')
 
 try:
-    domenica.book_request(None)
-except LibraryError as e:
+    id_card = input('Input your id card: ')
+    user = library.find_user(id_card)
+    print(f'{user.id_card} whit name {user.name}')
+except UserNoFoudError as e:
     print(e)
-    print('Error: Title invalid')
+    print('The user does not exist')

@@ -5,6 +5,7 @@ from typing import List
 # ------------------------------------------------
 # Book implementations
 from books import PhysicalBook, DigitalBook
+from exceptions import LibraryError
 # Library (composition root)
 from library import Library
 # User types and protocol for polymorphism
@@ -114,3 +115,9 @@ library.users = users
 # and access shared attributes
 for user in users:
     print(f'name: {user.name}')
+
+try:
+    domenica.book_request(None)
+except LibraryError as e:
+    print(e)
+    print('Error: Title invalid')

@@ -1,5 +1,7 @@
 from typing import Protocol
 
+from exceptions import InvalidTitleError
+
 
 # ============================================================
 # PROTOCOL (Polymorphism via structural typing)
@@ -73,6 +75,10 @@ class Student(User):
         Students are limited to a maximum number
         of borrowed books.
         """
+
+        if not title:
+            raise InvalidTitleError('Please provide a title')
+
         if len(self.lend_books) < self.limit_books:
             # Add the book to the borrowed list
             self.lend_books.append(title)

@@ -38,8 +38,8 @@ class Book:
             title: str,
             author: str,
             price: float,
-            available: bool,
-            borrowed_times: int
+            available: bool = True,
+            borrowed_times: int = 0
     ):
         # Public attributes (can be accessed directly)
         self.id = id  # Unique identifier

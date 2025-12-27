@@ -1,4 +1,4 @@
-from exceptions import UserNoFoudError
+from exceptions import UserNoFoudError, BookNotAvailable
 
 
 class Library:
@@ -39,3 +39,10 @@ class Library:
                 return user
 
         raise UserNoFoudError(f'User with id card: {id_card} not found')
+
+    def find_book(self, title: str):
+        for book in self.books:
+            if book.title == title and book.available:
+                return book
+
+        raise BookNotAvailable(f'Book with title: {title} not found')

@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Protocol
 
 from exceptions import InvalidTitleError
@@ -22,12 +23,19 @@ class ApplicantProtocol(Protocol):
         ...
 
 
+class BaseUser(ABC):
+
+    @abstractmethod
+    def book_request(self):
+        pass
+
+
 # ============================================================
 # BASE CLASS
 # ============================================================
 # The User class represents a generic user of the system.
 # It provides common attributes and default behavior.
-class User:
+class User(BaseUser):
 
     def __init__(self, id: int, name: str, id_card: str):
         # Unique identifier of the user

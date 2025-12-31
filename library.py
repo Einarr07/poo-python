@@ -49,3 +49,7 @@ class Library:
                 return book
 
         raise BookNotAvailable(f'Book with title: {title} not found')
+
+    @staticmethod
+    def validated_id(id: int):
+        return isinstance(id, int) and id >= 0

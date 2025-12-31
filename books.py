@@ -39,7 +39,6 @@ class Book:
             author: str,
             price: float,
             available: bool = True,
-            borrowed_times: int = 0
     ):
         # Public attributes (can be accessed directly)
         self.id = id  # Unique identifier
@@ -50,7 +49,19 @@ class Book:
 
         # Private attribute (Encapsulation)
         # Tracks how many times the book has been borrowed
-        self.__borrowed_times = borrowed_times
+        self.__borrowed_times = 0
+
+    @classmethod
+    def create_not_available(
+            cls,
+            id: int,
+            title: str,
+            author: str,
+            price: float,
+    ) -> 'Book':
+        return cls(
+            id, title, author, price, available=False
+        )
 
     # --------------------------------------------------------
     # Behavior: lend the book

@@ -26,9 +26,10 @@ class Library:
     #
     # This method does not modify state;
     # it only queries existing data.
+    @property
     def books_available(self):
         return [
-            book.title  # Extract the book title
+            book
             for book in self.books
             if book.available  # Filter only available books
         ]
@@ -41,8 +42,10 @@ class Library:
         raise UserNoFoudError(f'User with id card: {id_card} not found')
 
     def find_book(self, title: str):
+        normalized = title.strip().lower()
+
         for book in self.books:
-            if book.title == title and book.available:
+            if book.title.lower() == normalized:
                 return book
 
         raise BookNotAvailable(f'Book with title: {title} not found')

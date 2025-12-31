@@ -59,6 +59,10 @@ class User(BaseUser):
         """
         return f'Request of book {title} successful'
 
+    @property
+    def full_name(self):
+        return f'{self.id_card} whit name {self.name}'
+
 
 # ============================================================
 # CHILD CLASS: Student (Inheritance + Polymorphism)

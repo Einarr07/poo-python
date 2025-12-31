@@ -16,13 +16,12 @@ print('-' * 30)
 print('| Welcome to the library! |')
 print('-' * 30)
 
-print(f'We have available {len(library.books_available())} books')
+print(f'We have available {len(library.books_available)} books')
 
 count = 0
-for book in library.books:
-    if book.available:
-        count += 1
-        print(f'{count} ---> Title:{book.title} - Author:{book.author}')
+for book in library.books_available:
+    count += 1
+    print(f'{count} ---> {book.all_description}\nBorrowed times: {book.borrowed_times}')
 
 id_card = input('Input your id card: ')
 
@@ -41,12 +40,12 @@ try:
 except BookNotAvailable as e:
     print(e)
     print('The book does not exist or is not available')
+else:
+    request_book = user.book_request(book.title)
+    print(f'\n{request_book}')
 
-request_book = user.book_request(book.title)
-print(f'\n{request_book}')
-
-try:
-    book_lend = book.lend()
-    print(f'\n{book_lend}')
-except BookNotAvailable as e:
-    print(e)
+    try:
+        result = book.lend()
+        print(f'\n{result}')
+    except BookNotAvailable as e:
+        print(e)

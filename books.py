@@ -82,6 +82,7 @@ class Book:
     # Business logic method
     # Determines if the book is considered "popular"
     # --------------------------------------------------------
+    @property
     def is_popular(self):
         return self.__borrowed_times > 5
 
@@ -99,15 +100,24 @@ class Book:
     # Getter (Encapsulation)
     # Provides controlled read access to private attribute
     # --------------------------------------------------------
-    def get_borrowed_times(self):
+    @property
+    def borrowed_times(self):
         return self.__borrowed_times
 
     # --------------------------------------------------------
     # Setter (Encapsulation)
     # Provides controlled write access to private attribute
     # --------------------------------------------------------
-    def set_borrowed_times(self, value):
-        self.__borrowed_times = value
+
+    @borrowed_times.setter
+    def borrowed_times(self, value):
+        if value > 0:
+            self.__borrowed_times = value
+        raise ValueError('The value of borrowed_times must be positive')
+
+    @property
+    def all_description(self):
+        return f'{self.title} by {self.author} -> Price: ${self.price}'
 
 
 # ============================================================

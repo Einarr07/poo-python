@@ -8,37 +8,42 @@ from exceptions import InvalidTitleError
 # PROTOCOL (Polymorphism via structural typing)
 # ============================================================
 # A Protocol defines a "contract".
-# Any class that implements the required methods
+# Any class implementing the required methods
 # can be used polymorphically, even without inheritance.
 class ApplicantProtocol(Protocol):
 
     def book_request(self, title: str) -> str:
         """
-        Any class that wants to act as an 'Applicant'
-        MUST implement this method.
+        Contract method: any class acting as an Applicant
+        must implement this method.
 
-        This allows polymorphism without requiring
-        a shared base class.
+        Enables polymorphism without a shared base class.
         """
         ...
 
 
+# ============================================================
+# ABSTRACT BASE CLASS
+# ============================================================
+# BaseUser is an abstract class that enforces
+# that all subclasses implement certain methods.
 class BaseUser(ABC):
 
     @abstractmethod
     def book_request(self):
+        """Subclasses must provide their own implementation."""
         pass
 
 
 # ============================================================
-# BASE CLASS
+# BASE CLASS: User
 # ============================================================
-# The User class represents a generic user of the system.
-# It provides common attributes and default behavior.
+# Represents a generic system user.
+# Provides shared attributes and default behavior.
 class User(BaseUser):
 
     def __init__(self, id: int, name: str, id_card: str):
-        # Unique identifier of the user
+        # Unique system identifier
         self.id = id
 
         # User's full name
@@ -47,76 +52,78 @@ class User(BaseUser):
         # Identification card number
         self.id_card = id_card
 
-        # List to keep track of borrowed books
+        # List to track borrowed books
         self.lend_books = []
 
     def book_request(self, title: str):
         """
-        Default implementation for requesting a book.
-
-        This method can be overridden by subclasses
-        to apply specific rules.
+        Default book request behavior.
+        Can be overridden by subclasses for specific rules.
         """
         return f'Request of book {title} successful'
 
     @property
     def full_name(self):
-        return f'{self.id_card} whit name {self.name}'
+        """Returns a formatted string with user ID and name."""
+        return f'{self.id_card} with name {self.name}'
 
 
 # ============================================================
-# CHILD CLASS: Student (Inheritance + Polymorphism)
+# CHILD CLASS: Student
 # ============================================================
-# Student inherits from User and customizes behavior.
+# Inherits from User and applies specific borrowing rules.
+# Demonstrates:
+# - Inheritance
+# - Polymorphism (overriding methods)
 class Student(User):
 
     def __init__(self, id: int, name: str, id_card: str, subject: str):
-        # Call the parent constructor to reuse initialization logic
+        # Reuse parent initialization
         super().__init__(id, name, id_card)
 
-        # Student's academic subject
+        # Academic subject of the student
         self.subject = subject
 
-        # Maximum number of books a student can borrow
+        # Maximum books a student can borrow
         self.limit_books = 3
 
     def book_request(self, title: str):
         """
         Overrides User.book_request().
 
-        Students are limited to a maximum number
-        of borrowed books.
+        Students are limited to a maximum number of borrowed books.
+        Validates input and enforces borrowing limit.
         """
-
         if not title:
             raise InvalidTitleError('Please provide a title')
 
         if len(self.lend_books) < self.limit_books:
-            # Add the book to the borrowed list
+            # Borrow the book
             self.lend_books.append(title)
             return f'Request of book {title} successful'
         else:
-            # Deny the request if the limit is reached
+            # Deny request if limit reached
             return 'You have reached the limit of 3 borrowed books'
 
 
 # ============================================================
-# CHILD CLASS: Teacher (Inheritance + Polymorphism)
+# CHILD CLASS: Teacher
 # ============================================================
-# Teacher also inherits from User but has different rules.
+# Inherits from User but has no borrowing limit.
+# Demonstrates polymorphic behavior with different rules.
 class Teacher(User):
 
     def __init__(self, id: int, name: str, id_card: str):
-        # Initialize shared attributes from User
+        # Initialize shared attributes
         super().__init__(id, name, id_card)
 
-        # Teachers do not have a borrowing limit
+        # No borrowing limit for teachers
         self.limit_books = None
 
     def book_request(self, title: str):
         """
         Overrides User.book_request().
 
-        Teachers can request books without restrictions.
+        Teachers can request books without restriction.
         """
         return f'Request of book {title} successful'

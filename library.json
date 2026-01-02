@@ -1,0 +1,170 @@
+{
+    "name": "Las Aguas",
+    "users": [
+        {
+            "id": 1,
+            "name": "Alejandro Ruiz",
+            "id_card": "STU001",
+            "lend_books": [
+                "1984"
+            ],
+            "subject": "Ingeniería de Software",
+            "limit_books": 3
+        },
+        {
+            "id": 2,
+            "name": "Mariana López",
+            "id_card": "STU002",
+            "lend_books": [],
+            "subject": "Medicina",
+            "limit_books": 3
+        },
+        {
+            "id": 3,
+            "name": "Carlos Mendoza",
+            "id_card": "STU003",
+            "lend_books": [],
+            "subject": "Derecho",
+            "limit_books": 3
+        },
+        {
+            "id": 4,
+            "name": "Lucía Fernández",
+            "id_card": "STU004",
+            "lend_books": [],
+            "subject": "Psicología",
+            "limit_books": 3
+        },
+        {
+            "id": 5,
+            "name": "Roberto Gómez",
+            "id_card": "STU005",
+            "lend_books": [],
+            "subject": "Arquitectura",
+            "limit_books": 3
+        },
+        {
+            "id": 6,
+            "name": "Elena Torres",
+            "id_card": "STU006",
+            "lend_books": [],
+            "subject": "Diseño Gráfico",
+            "limit_books": 3
+        },
+        {
+            "id": 7,
+            "name": "Mateo Rivas",
+            "id_card": "STU007",
+            "lend_books": [],
+            "subject": "Economía",
+            "limit_books": 3
+        },
+        {
+            "id": 8,
+            "name": "Sofía Castro",
+            "id_card": "STU008",
+            "lend_books": [],
+            "subject": "Biología",
+            "limit_books": 3
+        },
+        {
+            "id": 9,
+            "name": "Diego Herrera",
+            "id_card": "STU009",
+            "lend_books": [],
+            "subject": "Historia",
+            "limit_books": 3
+        },
+        {
+            "id": 10,
+            "name": "Valeria Ortiz",
+            "id_card": "STU010",
+            "lend_books": [],
+            "subject": "Filosofía",
+            "limit_books": 3
+        }
+    ],
+    "books": [
+        {
+            "id": 1,
+            "title": "Cien años de soledad",
+            "author": "Gabriel García Márquez",
+            "price": 25.5,
+            "available": true,
+            "_Book__borrowed_times": 0
+        },
+        {
+            "id": 2,
+            "title": "1984",
+            "author": "George Orwell",
+            "price": 18.9,
+            "available": false,
+            "_Book__borrowed_times": 0
+        },
+        {
+            "id": 3,
+            "title": "El Principito",
+            "author": "Antoine de Saint-Exupéry",
+            "price": 12.0,
+            "available": true,
+            "_Book__borrowed_times": 0
+        },
+        {
+            "id": 4,
+            "title": "Don Quijote de la Mancha",
+            "author": "Miguel de Cervantes",
+            "price": 30.0,
+            "available": true,
+            "_Book__borrowed_times": 0
+        },
+        {
+            "id": 5,
+            "title": "Orgullo y Prejuicio",
+            "author": "Jane Austen",
+            "price": 15.75,
+            "available": true,
+            "_Book__borrowed_times": 0
+        },
+        {
+            "id": 6,
+            "title": "El Hobbit",
+            "author": "J.R.R. Tolkien",
+            "price": 22.0,
+            "available": true,
+            "_Book__borrowed_times": 0
+        },
+        {
+            "id": 7,
+            "title": "Crónica de una muerte anunciada",
+            "author": "Gabriel García Márquez",
+            "price": 14.2,
+            "available": true,
+            "_Book__borrowed_times": 0
+        },
+        {
+            "id": 8,
+            "title": "Fahrenheit 451",
+            "author": "Ray Bradbury",
+            "price": 16.5,
+            "available": true,
+            "_Book__borrowed_times": 0
+        },
+        {
+            "id": 9,
+            "title": "Rayuela",
+            "author": "Julio Cortázar",
+            "price": 21.0,
+            "available": true,
+            "_Book__borrowed_times": 0
+        },
+        {
+            "id": 10,
+            "title": "El resplandor",
+            "author": "Stephen King",
+            "price": 19.99,
+            "available": true,
+            "_Book__borrowed_times": 0
+        }
+    ],
+    "save_date": "02/01/2026 12:13:27"
+}

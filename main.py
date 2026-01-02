@@ -1,122 +1,91 @@
-# ------------------------------------------------
+# ============================================================
+# MAIN APPLICATION ENTRY POINT
+# ============================================================
+# This script demonstrates:
+# - Composition: Library has Users and Books
+# - Object interaction (User requests Book, Library coordinates)
+# - Exception handling
+# - Persistence (saving/loading data)
+# - Simple CLI for user interaction
+
+# ------------------------------------------------------------
 # Imports from domain modules
-# ------------------------------------------------
-# Book implementations
-from books import PhysicalBook, DigitalBook
-from exceptions import UserNoFoudError
-# Library (composition root)
-from library import Library
-# User types and protocol for polymorphism
-from users import Student, Teacher
+# ------------------------------------------------------------
+import sys
 
-# =================================================
-# Library initialization
-# =================================================
-# Create a Library instance
-library = Library('Las Aguas')
+from exceptions import UserNoFoudError, BookNotAvailable
+from persistence import Persistence
 
-# =================================================
-# User creation
-# =================================================
-# Create users with different concrete types
-# (Student and Teacher) that share the same behavior
-# through ApplicantProtocol
-users = [
-    Student(1, name="Domenica", id_card="123", subject='Math'),
-    Student(3, name='Jose', id_card="456", subject='Physics'),
-    Teacher(2, name="Luis", id_card="456")
-]
+# ------------------------------------------------------------
+# Load persisted library data
+# ------------------------------------------------------------
+# Persistence layer reconstructs Library, Books, and Users
+persistence = Persistence()
+library = persistence.load_data()
 
-# =================================================
-# Book creation
-# =================================================
-# Physical books (concrete implementation of Book)
-physical_books = [
-    PhysicalBook(
-        id=11,
-        title="El santuario en la tierra",
-        author="Sixto Paz",
-        price=5.00,
-        available=True,
-        borrowed_times=0
-    ),
-
-    PhysicalBook(
-        id=12,
-        title="Budismo",
-        author="Joshua R. Pazakiewicz",
-        price=5.00,
-        available=True,
-        borrowed_times=0
-    ),
-
-    PhysicalBook(
-        id=13,
-        title="Ética para Amador",
-        author="Fernando Savater",
-        price=5.00,
-        available=False,
-        borrowed_times=0
-    ),
-
-    PhysicalBook(
-        id=14,
-        title="Hábitos Atómicos",
-        author="James Clear",
-        price=5.00,
-        available=True,
-        borrowed_times=0
-    ),
-
-    # Positional-argument examples
-    PhysicalBook(
-        1,
-        '100 Años de Soledad',
-        'Gabriel García Márquez',
-        10.5,
-        True,
-        0
-    ),
-
-    PhysicalBook(
-        2,
-        'Principito',
-        'Saint-Exupéry',
-        12.3,
-        False,
-        0
-    )
-]
-
-# Digital books (different behavior via polymorphism)
-digital_books = [
-    DigitalBook(1, 'Normandia', 'Norma Guatemala', 12, True, 2),
-    DigitalBook(2, 'Sistemas', 'James', 56, True, 6),
-    DigitalBook(3, 'La razon para estudiar', 'Erick', 56, True, 6),
-    DigitalBook(4, 'Computacion', 'Henrry', 56, True, 6),
-    DigitalBook(5, 'Algebra', 'Sofia', 56, True, 6)
-]
-
-# =================================================
-# Composition: add books and users to the library
-# =================================================
-# The Library "has" books and users
-library.books = physical_books + digital_books
-library.users = users
-
+# ------------------------------------------------------------
+# Welcome message
+# ------------------------------------------------------------
 print('-' * 30)
 print('| Welcome to the library! |')
 print('-' * 30)
 
-print(f'We have available {len(library.books_available())} books')
-for book in library.books:
-    if book.available:
-        print(f' ---> Title:{book.title} - Author:{book.author}')
+# ------------------------------------------------------------
+# Show available books
+# ------------------------------------------------------------
+# Demonstrates iteration over object collections
+# and using properties to query object state
+print(f'We have available {len(library.books_available)} books')
+
+count = 0
+for book in library.books_available:
+    count += 1
+    print(f'{count} ---> {book.all_description}\nBorrowed times: {book.borrowed_times}')
+
+# ------------------------------------------------------------
+# User input: identify user
+# ------------------------------------------------------------
+id_card = input('Input your id card: ')
 
 try:
-    id_card = input('Input your id card: ')
+    # Attempt to find the user in the library
     user = library.find_user(id_card)
-    print(f'{user.id_card} whit name {user.name}')
+    print(f'{user.id_card} with name {user.name}')
 except UserNoFoudError as e:
+    # Domain-specific exception handling
     print(e)
     print('The user does not exist')
+    sys.exit(1)  # Exit if user not found
+
+# ------------------------------------------------------------
+# User input: request a book by title
+# ------------------------------------------------------------
+title = input('Input the title of the book: ')
+
+try:
+    # Attempt to find the book in the library
+    book = library.find_book(title)
+    print(f'The book that your request is: {title}')
+except BookNotAvailable as e:
+    # Handle book not available or not found
+    print(e)
+    print('The book does not exist or is not available')
+else:
+    # --------------------------------------------------------
+    # User requests the book (polymorphic method)
+    # --------------------------------------------------------
+    request_book = user.book_request(book.title)
+    print(f'\n{request_book}')
+
+    try:
+        # Lend the book (updates availability and borrowed times)
+        result = book.lend()
+        print(f'\n{result}')
+    except BookNotAvailable as e:
+        print(e)
+
+# ------------------------------------------------------------
+# Save library state
+# ------------------------------------------------------------
+# Persist updated library data (books and users)
+persistence.save_data(library)
